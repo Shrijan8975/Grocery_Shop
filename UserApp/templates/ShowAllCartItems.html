@@ -1,0 +1,62 @@
+{%extends "master.html"%}
+{%block content%}
+<script type="text/javascript">
+function increment(val)
+{
+    var txtId = val;
+    var num = parseInt(document.getElementById(txtId).value);
+    if(num < 10)
+    {
+      num++;
+    }
+    
+    document.getElementById(txtId).value = num;
+
+}
+function decrement(val)
+{
+    var txtId = val;
+    var num = parseInt(document.getElementById(txtId).value);
+    if(num>1)
+    {
+      num--;
+    }
+    
+    document.getElementById(txtId).value = num;    
+}
+
+</script>
+<table class="table">
+  <tr><th>Grocery id</th><th>grocery Name</th><th>Price</th><th>Quantity</th></tr>
+  {%for item in items%}
+  <form method="post">
+    {%csrf_token%}
+  <tr>
+    <td>{{item.grocery.id}}
+      <input type="hidden" name="grocery_id" value="{{item.grocery.id}}"/>
+    </td>
+    <td>{{item.grocery.gname}}</td>
+    <td>{{item.grocery.price}}</td>
+    <td>
+      <button class="button btn-danger" type="button" onclick="decrement('qty{{item.grocery.id}}');">  -  </button>
+      <input name="item_qty" type="text" id="qty{{item.grocery.id}}" value="{{item.qty}}" size="4"/>
+      <button class="button btn-danger" type="button" onclick="increment('qty{{item.grocery.id}}');">  +  </button>
+    </td>
+    <td><button class="button btn-success" type="submit" name="action" value="update">Update</button></td>
+    <td><button class="button btn-success" type="submit" name="action" value="remove">Remove</button></td>
+  </tr>
+ </form>
+       
+
+  
+  {%endfor%}
+
+</table>
+
+<hr/>
+<h2>Total : {{request.session.total}}
+  <br/>
+  <a href="Makepayment">Proceed to Make Payment</a>
+</h2>
+</div>
+{%endblock%}
